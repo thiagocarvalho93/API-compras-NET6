@@ -3,6 +3,7 @@ using ApiDotnet.Application.DTOs.Validations;
 using ApiDotnet.Application.Services.Interfaces;
 using ApiDotnet.Domain.Entities;
 using ApiDotnet.Domain.Repositories;
+using AutoMapper;
 
 namespace ApiDotnet.Application.Services
 {
@@ -12,12 +13,14 @@ namespace ApiDotnet.Application.Services
         private readonly IProductRepository _productRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IMapper _mapper;
 
-        public PurchaseService(IProductRepository productRepository, IPersonRepository personRepository, IPurchaseRepository purchaseRepository)
+        public PurchaseService(IProductRepository productRepository, IPersonRepository personRepository, IPurchaseRepository purchaseRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _personRepository = personRepository;
             _purchaseRepository = purchaseRepository;
+            _mapper = mapper;
         }
 
         public async Task<ResultService<PurchaseDTO>> CreateAsync(PurchaseDTO purchaseDTO)
@@ -44,14 +47,18 @@ namespace ApiDotnet.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<ResultService<ICollection<PurchaseDTO>>> GetAsync()
+        public async Task<ResultService<ICollection<PurchaseDetailDTO>>> GetAsync()
         {
-            throw new NotImplementedException();
+            var result = await _purchaseRepository.GetAllAsync();
+            return ResultService.Ok<ICollection<PurchaseDetailDTO>>(_mapper.Map<ICollection<PurchaseDetailDTO>>(result));
         }
 
-        public Task<ResultService<PurchaseDTO>> GetByIdAsync(int id)
+        public async Task<ResultService<PurchaseDetailDTO>> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _purchaseRepository.GetByIdAsync(id);
+            if (result == null)
+                return ResultService.Fail<PurchaseDetailDTO>("Compra não encontrada.");
+            return ResultService.Ok<PurchaseDetailDTO>(_mapper.Map<PurchaseDetailDTO>(result));
         }
 
         public Task<ResultService> UpdateAsync(PurchaseDTO purchaseDTO)
