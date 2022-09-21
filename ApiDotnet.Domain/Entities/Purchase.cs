@@ -29,7 +29,7 @@ namespace ApiDotnet.Domain.Entities
 
         public Purchase(int id, int productId, int personId)
         {
-            DomainValidationException.When(id < 0, "id inválido!");
+            DomainValidationException.When(id <= 0, "id inválido!");
             Validate(productId, personId);
             Id = id;
             ProductId = productId;
@@ -41,8 +41,8 @@ namespace ApiDotnet.Domain.Entities
         #region Métodos
         private void Validate(int productId, int personId)
         {
-            DomainValidationException.When(productId < 0, "Id produto inválido!");
-            DomainValidationException.When(personId < 0, "Id pessoa inválido!");
+            DomainValidationException.When(productId <= 0, "Id produto inválido!");
+            DomainValidationException.When(personId <= 0, "Id pessoa inválido!");
         }
 
         #endregion

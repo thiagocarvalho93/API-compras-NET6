@@ -45,6 +45,7 @@ namespace ApiDotnet.Api.Controllers
             return NotFound(result);
         }
 
+        // TODO Retornar 404 para id não encontrado.
         [HttpPut]
         [Route("{id}")]
         public async Task<ActionResult> UpdateAsync(int id, [FromBody] PersonDTO personDTO)

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ApiDotnet.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,7 +8,7 @@ namespace ApiDotnet.Infra.Data.Maps
     {
         public void Configure(EntityTypeBuilder<Purchase> builder)
         {
-            builder.ToTable("Compras");
+            builder.ToTable("Compra");
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Id)
@@ -20,6 +16,7 @@ namespace ApiDotnet.Infra.Data.Maps
                 .UseIdentityColumn();
 
             builder.Property(c => c.Date)
+                .HasColumnType("date")
                 .HasColumnName("DtCompra");
 
             builder.Property(c => c.ProductId)
