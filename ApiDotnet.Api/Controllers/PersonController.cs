@@ -1,5 +1,6 @@
 using ApiDotnet.Application.DTOs;
 using ApiDotnet.Application.Services.Interfaces;
+using ApiDotnet.Domain.FiltersDb;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiDotnet.Api.Controllers
@@ -43,6 +44,17 @@ namespace ApiDotnet.Api.Controllers
                 return Ok(result);
 
             return NotFound(result);
+        }
+
+        [HttpGet]
+        [Route("pages")]
+        public async Task<ActionResult> GetByIdAsync([FromQuery] PersonFilterDb personFilterDb)
+        {
+            var result = await _personService.GetPagedAsync(personFilterDb);
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         // TODO Retornar 404 para id não encontrado.

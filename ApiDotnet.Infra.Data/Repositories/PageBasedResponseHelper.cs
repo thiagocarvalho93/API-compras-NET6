@@ -22,9 +22,10 @@ namespace ApiDotnet.Infra.Data.Repositories
             return response;
         }
 
-        private static IEnumerable<T> OrderByDynamic<T>(this IEnumerable<T> query, string PropertyName)
+        // TODO Tratar para quando a propertyName não existe
+        private static IEnumerable<T> OrderByDynamic<T>(this IEnumerable<T> query, string propertyName)
         {
-            return query.OrderBy(x => x.GetType().GetProperty(PropertyName).GetValue(x, null));
+            return query.OrderBy(x => x.GetType().GetProperty(propertyName).GetValue(x, null));
         }
     }
 

@@ -4,6 +4,6 @@ namespace ApiDotnet.Domain.FiltersDb
 {
     public class PersonFilterDb : PageBasedRequest
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

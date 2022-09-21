@@ -1,4 +1,5 @@
 using ApiDotnet.Application.DTOs;
+using ApiDotnet.Domain.FiltersDb;
 
 namespace ApiDotnet.Application.Services.Interfaces
 {
@@ -9,5 +10,6 @@ namespace ApiDotnet.Application.Services.Interfaces
         Task<ResultService<PersonDTO>> GetByIdAsync(int id);
         Task<ResultService> UpdateAsync(PersonDTO personDTO);
         Task<ResultService> DeleteAsync(int id);
+        Task<ResultService<PageBasedResponseDTO<PersonDTO>>> GetPagedAsync(PersonFilterDb personFilterDb);
     }
 }
