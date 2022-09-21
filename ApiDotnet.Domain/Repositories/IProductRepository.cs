@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ApiDotnet.Domain.Entities;
 
 namespace ApiDotnet.Domain.Repositories
@@ -13,5 +9,6 @@ namespace ApiDotnet.Domain.Repositories
         Task<Product> CreateAsync(Product product);
         Task EditAsync(Product product);
         Task DeleteAsync(Product product);
+        Task<int> GetIdByCodErpAsync(string codErp);
     }
 }
