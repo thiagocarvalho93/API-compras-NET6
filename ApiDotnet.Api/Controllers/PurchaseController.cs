@@ -74,11 +74,18 @@ namespace ApiDotnet.Api.Controllers
         public async Task<ActionResult> UpdateAsync(int id, [FromBody] PurchaseDTO purchaseDTO)
         {
             purchaseDTO.Id = id;
-            var result = await _purchaseService.UpdateAsync(purchaseDTO);
-            if (result.IsSuccess)
-                return Ok(result);
-
-            return BadRequest(result);
+            try
+            {
+                var result = await _purchaseService.UpdateAsync(purchaseDTO);
+                if (result.IsSuccess)
+                    return Ok(result);
+                return BadRequest(result);
+            }
+            catch (DomainValidationException ex)
+            {
+                var result = ResultService.Fail(ex.Message);
+                return BadRequest(result);
+            }
         }
     }
 }

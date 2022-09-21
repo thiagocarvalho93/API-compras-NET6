@@ -42,9 +42,14 @@ namespace ApiDotnet.Application.Services
             return ResultService.Ok<PurchaseDTO>(purchaseDTO);
         }
 
-        public Task<ResultService> DeleteAsync(int id)
+        public async Task<ResultService> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var purchase = await _purchaseRepository.GetByIdAsync(id);
+            if (purchase == null)
+                return ResultService.Fail("Compra não encontrada.");
+
+            await _purchaseRepository.DeleteAsync(purchase);
+            return ResultService.Ok($"Compra {id} deletada com sucesso.");
         }
 
         public async Task<ResultService<ICollection<PurchaseDetailDTO>>> GetAsync()
@@ -61,9 +66,32 @@ namespace ApiDotnet.Application.Services
             return ResultService.Ok<PurchaseDetailDTO>(_mapper.Map<PurchaseDetailDTO>(result));
         }
 
-        public Task<ResultService> UpdateAsync(PurchaseDTO purchaseDTO)
+        public async Task<ResultService<PurchaseDTO>> UpdateAsync(PurchaseDTO purchaseDTO)
         {
-            throw new NotImplementedException();
+            if (purchaseDTO == null)
+                return ResultService.Fail<PurchaseDTO>("Insira um objeto.");
+
+            var result = new PurchaseDTOValidator().Validate(purchaseDTO);
+            if (!result.IsValid)
+                return ResultService.RequestError<PurchaseDTO>("Há campos inválidos", result);
+
+            var purchase = await _purchaseRepository.GetByIdAsync(purchaseDTO.Id);
+            // TODO Retornar 404 no controller
+            if (purchase == null)
+                return ResultService.Fail<PurchaseDTO>("Compra não encontrada.");
+
+            var productId = await _productRepository.GetIdByCodErpAsync(purchaseDTO.CodErp);
+            if (productId == 0)
+                return ResultService.Fail<PurchaseDTO>("Código Erp não encontrado.");
+
+            var personId = await _personRepository.GetIdByDocumentAsync(purchaseDTO.Document);
+            if (personId == 0)
+                return ResultService.Fail<PurchaseDTO>("Documento não encontrado.");
+
+            purchase.Edit(purchase.Id, productId, personId);
+
+            await _purchaseRepository.EditAsync(purchase);
+            return ResultService.Ok<PurchaseDTO>(purchaseDTO);
         }
     }
 }

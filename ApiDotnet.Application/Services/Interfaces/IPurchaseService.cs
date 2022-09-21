@@ -7,7 +7,7 @@ namespace ApiDotnet.Application.Services.Interfaces
         Task<ResultService<PurchaseDTO>> CreateAsync(PurchaseDTO purchaseDTO);
         Task<ResultService<ICollection<PurchaseDetailDTO>>> GetAsync();
         Task<ResultService<PurchaseDetailDTO>> GetByIdAsync(int id);
-        Task<ResultService> UpdateAsync(PurchaseDTO purchaseDTO);
+        Task<ResultService<PurchaseDTO>> UpdateAsync(PurchaseDTO purchaseDTO);
         Task<ResultService> DeleteAsync(int id);
     }
 }

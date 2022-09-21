@@ -39,6 +39,14 @@ namespace ApiDotnet.Domain.Entities
         #endregion
 
         #region Métodos
+        public void Edit(int id, int productId, int personId)
+        {
+            DomainValidationException.When(id <= 0, "Id deve ser informado!");
+            Id = id;
+            Validate(productId, personId);
+            ProductId = productId;
+            PersonId = personId;
+        }
         private void Validate(int productId, int personId)
         {
             DomainValidationException.When(productId <= 0, "Id produto inválido!");
