@@ -14,13 +14,15 @@ namespace ApiDotnet.Application.Services
         private readonly IPersonRepository _personRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IMapper _mapper;
+        private readonly IUnityOfWork _unitOfWork;
 
-        public PurchaseService(IProductRepository productRepository, IPersonRepository personRepository, IPurchaseRepository purchaseRepository, IMapper mapper)
+        public PurchaseService(IProductRepository productRepository, IPersonRepository personRepository, IPurchaseRepository purchaseRepository, IMapper mapper, IUnityOfWork unitOfWork)
         {
             _productRepository = productRepository;
             _personRepository = personRepository;
             _purchaseRepository = purchaseRepository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ResultService<PurchaseDTO>> CreateAsync(PurchaseDTO purchaseDTO)
@@ -32,14 +34,31 @@ namespace ApiDotnet.Application.Services
             if (!validation.IsValid)
                 return ResultService.RequestError<PurchaseDTO>("Há campos inválidos.", validation);
 
-            var productId = await _productRepository.GetIdByCodErpAsync(purchaseDTO.CodErp);
-            var personId = await _personRepository.GetIdByDocumentAsync(purchaseDTO.Document);
 
-            var purchase = new Purchase(productId, personId);
+            try
+            {
+                await _unitOfWork.BeginTransaction();
+                var productId = await _productRepository.GetIdByCodErpAsync(purchaseDTO.CodErp);
+                if (productId == 0)
+                {
+                    var product = new Product(purchaseDTO.ProductName, purchaseDTO.CodErp, purchaseDTO.Price ?? 0);
+                    product = await _productRepository.CreateAsync(product);
+                    productId = product.Id;
+                }
+                var personId = await _personRepository.GetIdByDocumentAsync(purchaseDTO.Document);
 
-            var data = await _purchaseRepository.CreateAsync(purchase);
-            purchaseDTO.Id = data.Id;
-            return ResultService.Ok<PurchaseDTO>(purchaseDTO);
+                var purchase = new Purchase(productId, personId);
+
+                var data = await _purchaseRepository.CreateAsync(purchase);
+                purchaseDTO.Id = data.Id;
+                await _unitOfWork.Commit();
+                return ResultService.Ok<PurchaseDTO>(purchaseDTO);
+            }
+            catch (System.Exception ex)
+            {
+                await _unitOfWork.Rollback();
+                return ResultService.Fail<PurchaseDTO>(ex.Message);
+            }
         }
 
         public async Task<ResultService> DeleteAsync(int id)
