@@ -62,10 +62,8 @@ namespace ApiDotnet.Infra.Data.Repositories
                             .Include(x => x.Product)
                             .Include(x => x.Person)
                             .Where(x => x.ProductId == productId).ToListAsync();
-
-
         }
-
+        
         public async Task<ICollection<Purchase>> GetAllAsync()
         {
             return await _db.Purchases
