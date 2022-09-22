@@ -2,6 +2,8 @@
 
 Baseado no tutorial "Criando uma API robusta em dotnet core 6" do canal Manual do Programador. Link: https://www.youtube.com/watch?v=ufjRbiaoou4&list=PLP4r6dpm_h-vPhZ-OXz3B5dcKpohAjhUE.
 
+Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar (CRUD) pessoas, produtos e compras, cada uma vinculada a um produto e uma pessoa.
+
 ## Seções:
 
 - Softwares utilizados
@@ -18,7 +20,7 @@ Baseado no tutorial "Criando uma API robusta em dotnet core 6" do canal Manual d
 - Transação
 - Autenticação JWT
 
-<hr>
+---
 
 ## Softwares utilizados
 
@@ -93,11 +95,20 @@ No nosso caso, eles foram criados na pasta Entities (também pode ser chamada de
 └── Domain
     └── Entities
         ├── Person.cs
-        └── etc...
+        ├── Product.cs
+        └── Purchases.cs
     └── Validations
         └── DomainValidationException.cs
 ```
-(...)
+
+Como foi dito no início, essa API deve ser capaz de fazer operações CRUD de pessoas, produtos e compras. É importante observar os relacionamentos que cada uma das entidades terão entre si para fazer os Models. Nesse caso, teremos o seguinte:
+
+```
+     Person (1,n)-> Purchase <-(n,1) Product
+```
+
+Ou seja, uma pessoa ou um produto podem estar vinculada a n compras, mas uma compra está vinculada apenas a uma pessoa e a um produto. Um produto e uma pessoa não possuem nenhum relacionamento entre si.
+
 ## Criação do banco de dados em SQL Server
 
 Para a criação do banco SQL Server, (...)
