@@ -1,0 +1,26 @@
+CREATE TABLE Produto(
+	IdProduto INT PRIMARY KEY IDENTITY(1, 1),
+	NmProduto VARCHAR(100),
+	CdErp VARCHAR(10),
+	VlVenda NUMERIC(10, 2)
+);
+CREATE TABLE Pessoa(
+	IdPessoa INT PRIMARY KEY IDENTITY(1, 1),
+	NmPessoa VARCHAR(100),
+	NrCpf VARCHAR(14),
+	NrCelular VARCHAR(20)
+);
+CREATE TABLE Compra(
+	IdCompra INT PRIMARY KEY IDENTITY(1, 1),
+	IdProduto INT,
+	IdPessoa INT,
+	DtCompra DATE CONSTRAINT FK_PESSOA FOREIGN KEY(IdPessoa) REFERENCES Pessoa(IdPessoa),
+	CONSTRAINT FK_PRODUTO FOREIGN KEY(IdProduto) REFERENCES Produto(IdProduto)
+);
+CREATE TABLE Usuario(
+	IdUsuario INT PRIMARY KEY IDENTITY(1, 1),
+	Senha VARCHAR(200),
+	Email VARCHAR(100)
+);
+INSERT INTO Usuario(Email, Senha)
+VALUES ('teste@gmail.com', 123);
