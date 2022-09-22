@@ -1,6 +1,6 @@
 # Tutorial API dotnet core 6
 
-Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar pessoas, produtos e compras, cada uma vinculada a um produto e uma pessoa. Baseado no tutorial [Criando uma API robusta em dotnet core 6](https://www.youtube.com/watch?v=ufjRbiaoou4&list=PLP4r6dpm_h-vPhZ-OXz3B5dcKpohAjhUE) do canal Manual do Programador.
+Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar pessoas, produtos e compras. Baseado no tutorial [Criando uma API robusta em dotnet core 6](https://www.youtube.com/watch?v=ufjRbiaoou4&list=PLP4r6dpm_h-vPhZ-OXz3B5dcKpohAjhUE) do canal Manual do Programador.
 
 ## Seções:
 
@@ -85,7 +85,7 @@ Obs: A camada API.Infra.IoC é uma camada auxiliar responsável pela injeção d
 
 ## Criação das entidades
 
-Os modelos são as classes responsáveis por representar as tabelas do banco de dados. Elas são as classes principais do nosso projeto, portanto ficam na camada Domain.
+Os modelos são as classes responsáveis por representar as tabelas do banco de dados, onde cada um dos atributos da classe representa uma coluna de sua tabela correspondente. Elas são as classes principais do nosso projeto, portanto ficam na camada Domain.
 
 No nosso caso, eles foram criados na pasta Entities (também pode ser chamada de Models). Além disso, foi criada uma classe de Exception específica (DomainValidationException.cs) para representar um erro na instanciação de uma Entity.
 
@@ -99,19 +99,37 @@ No nosso caso, eles foram criados na pasta Entities (também pode ser chamada de
         └── DomainValidationException.cs
 ```
 
-Como foi dito no início, essa API deve ser capaz de fazer operações CRUD de pessoas, produtos e compras. É importante observar os relacionamentos que cada uma das entidades terão entre si para fazer os Models. Nesse caso, teremos o seguinte:
+Como foi dito inicialmente, essa API deve ser capaz de fazer operações CRUD de pessoas, produtos e compras. É importante observar os relacionamentos que cada uma das entidades terão entre si para fazer os Models. Nesse caso, teremos o seguinte:
 
 ```
      Person (1,n)-> Purchase <-(n,1) Product
 ```
 
-Ou seja, uma pessoa ou um produto podem estar vinculada a n compras, mas uma compra está vinculada apenas a uma pessoa e a um produto. Um produto e uma pessoa não possuem nenhum relacionamento entre si.
+Ou seja, uma pessoa ou um produto podem estar vinculada a n compras, mas uma compra está vinculada apenas a uma pessoa e a um produto. Um produto e uma pessoa não possuem nenhum relacionamento entre si. Tendo isso em mente, nossos models de Person e Product obrigatoriamente devem ter como atributo uma coleção de itens do tipo Purchase (no nosso caso optou-se pela interface ICollection) e a classe Purchase deve ter um Person e um Product. Por exemplo, para a classe [Person](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Person.cs), pode-se observar os atributos e ao final a collection de purchases. Importante notar também que o construtor **deve inicializar uma lista vazia**, para evitar o problema de null pointer exception:
+
+```
+public sealed class Person
+    {
+        (...outros atributos)
+        public ICollection<Purchase> Purchases { get; set; }
+
+    public Person(string name, string document, string  phone)
+        {
+            (...)
+            Purchases = new List<Purchase>();
+        }
+```
+
+Adicionalmente
+Para a validação do modelo, primeiro criou-se a exception personalizada [DomainValidationException](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Validations/DomainValidationException.cs), que herda da classe Exception. O método When já atribui a condição e a mensagem de erro como parâmetros, economizando assim uma linha de código condicional para cada validação.
+
+Voltando ao modelo de [Person](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Person.cs), foi criado um método com as validações dos campos que são entrados como atributos. Esse método de validação é chamado nos construtores, para não permitir que se criem instâncias inválidas do mesmo. A mesma lógica é aplicada aos modelos de [Product](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Product.cs) e [Purchase](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Purchase.cs).
 
 ## Criação do banco de dados em SQL Server
 
-Para a criação do banco SQL Server, utilizou-se o software SQL Server Management Studio. Primeiramente, criou-se a nossa database: Janela Object Explore ➡ Clique em ➕ para expandir a conexão ➡ Botão direito na pasta databases e selecione new database ➡ Escolher o nome que quiser e pressione OK ➡ Pressione o botão direito novamente e selecione Refresh.
+Para a criação do banco SQL Server, utilizou-se o software SQL Server Management Studio. Para a criação da database: Janela Object Explore ➡ Clique em ➕ para expandir a conexão ➡ Botão direito na pasta databases e selecione new database ➡ Escolher o nome que quiser e pressione OK ➡ Pressione o botão direito novamente e selecione Refresh.
 
-Agora para criar nossas tabelas pressione o botão direito na database criada e selecione New query. Uma nova janela se abrirá, onde colocaremos nosso código SQL. Para consultar o código utilizado nesse exemplo, verifique o arquivo DDL.sql.
+Agora para criar nossas tabelas pressione o botão direito na database criada e selecione New query. Uma nova janela se abrirá, onde colocaremos nosso código SQL. Para consultar o código utilizado nesse exemplo, verifique o arquivo [DDL.sql](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/DDL.sql).
 
 ## DbContext e mapeamento de entidades
 
