@@ -22,9 +22,9 @@ Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar pe
 
 ## Softwares utilizados
 
-SDK do dotnet 6. [Link](https://dotnet.microsoft.com/en-us/download)
+[SDK do dotnet 6](https://dotnet.microsoft.com/en-us/download)
 
-VS code. [Link](https://code.visualstudio.com/download)
+[VS code](https://code.visualstudio.com/download)
 
 Extensões do vscode:
 
@@ -33,9 +33,11 @@ Extensões do vscode:
 - C# snippets: snippets úteis para C#.
 - vsode-solution-explorer: facilita o trabalho com as solutions (adicionar referências, etc.).
 
-SQL Server 2017. [Link](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
+[SQL Server 2017](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
 
-SQL Server Management Studio 18. [Link](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16)
+[SQL Server Management Studio 18](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16)
+
+Obs: Pode-se utilizar outro editor de texto (ex. Visual Studio) no lugar do VSCode e outro banco de dados (ex. Postgresql) e respectivo SGBD (ex. pgAdmin 4) no lugar do SQL Server. Fica a critério do usuário.
 
 ## Estrutura do projeto
 
@@ -120,16 +122,17 @@ public sealed class Person
         }
 ```
 
-Adicionalmente
 Para a validação do modelo, primeiro criou-se a exception personalizada [DomainValidationException](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Validations/DomainValidationException.cs), que herda da classe Exception. O método When já atribui a condição e a mensagem de erro como parâmetros, economizando assim uma linha de código condicional para cada validação.
 
 Voltando ao modelo de [Person](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Person.cs), foi criado um método com as validações dos campos que são entrados como atributos. Esse método de validação é chamado nos construtores, para não permitir que se criem instâncias inválidas do mesmo. A mesma lógica é aplicada aos modelos de [Product](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Product.cs) e [Purchase](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Purchase.cs).
 
-## Criação do banco de dados em SQL Server
+## Criação do banco de dados SQL Server
 
 Para a criação do banco SQL Server, utilizou-se o software SQL Server Management Studio. Para a criação da database: Janela Object Explore ➡ Clique em ➕ para expandir a conexão ➡ Botão direito na pasta databases e selecione new database ➡ Escolher o nome que quiser e pressione OK ➡ Pressione o botão direito novamente e selecione Refresh.
 
 Agora para criar nossas tabelas pressione o botão direito na database criada e selecione New query. Uma nova janela se abrirá, onde colocaremos nosso código SQL. Para consultar o código utilizado nesse exemplo, verifique o arquivo [DDL.sql](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/DDL.sql).
+
+Obs: no tutorial original utilizou-se o Postgresql e o pgAdmin 4, o tipo de banco de dados fica ao critério do usuário. No entanto, deve-se atentar à instalação do respectivo driver de conexão e configurações específicas do banco descritas nos próximos passos.
 
 ## DbContext e mapeamento de entidades
 
