@@ -5,7 +5,7 @@ Baseado no tutorial "Criando uma API robusta em dotnet core 6" do canal Manual d
 
 ## Seções:
 - Softwares utilizados
-- Estrutura inicial do projeto
+- Estrutura do projeto
 - Criação das entidades
 - Criação do banco de dados SQL Server
 - DbContext e mapeamento de entidades
@@ -21,16 +21,38 @@ Baseado no tutorial "Criando uma API robusta em dotnet core 6" do canal Manual d
 <hr>
 
 ## Softwares utilizados
-VS code com as seguintes extensões: 
+SDK do dotnet 6. Link para instação: https://dotnet.microsoft.com/en-us/download
+
+VS code. Link: https://code.visualstudio.com/download
+
+Extensões do vscode: 
 - C#: obrigatório pra compilar projetos em C#.
 - C# Extensions: praticidade para criar novas classes, interfaces, controllers, etc. em C#.
 - C# snippets: snippets úteis para C#.
 - vsode-solution-explorer: facilita o trabalho com as solutions (adicionar referências, etc.).
 
-SQL Server 2017 e SQL Server Management Studio 18 para o banco de dados.
-## Estrutura inicial do projeto
-O projeto utiliza a arquitetura (...)
+SQL Server 2017. Link: https://www.microsoft.com/pt-br/sql-server/sql-server-downloads
 
+SQL Server Management Studio 18. Link: https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16
+## Estrutura do projeto
+Uma boa arquitetura é vital para construir aplicações escaláveis, modulares e de fácil manutenção. Esse projeto utiliza a arquitetura "Clean code" (ou arquitetura limpa), que tem como principais benefícios ser:
+- Independente do banco de dados e dos frameworks utilizados.
+- Independente da camada de UI (interface do usuário).
+- Altamente testável.
+
+Esse padrão é constituído basicamente de 4 camadas principais:
+- Domain
+- Application
+- Infrastructure
+- Framework
+
+![image](clean-code.png)
+
+No VSCode, foi utlizado o console para criação dos projetos. Inicialmente, criou-se um:
+
+`dotnet new `
+
+Fonte: https://www.c-sharpcorner.com/article/introduction-to-clean-architecture-and-implementation-with-asp-net-core/
 ## Criação das entidades
 Os modelos são as classes responsáveis por representar as tabelas do banco de dados. Para isso, (...)
 ## Criação do banco de dados em SQL Server
