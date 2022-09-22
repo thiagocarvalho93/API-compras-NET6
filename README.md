@@ -1,8 +1,6 @@
 # Tutorial API dotnet core 6
 
-Baseado no tutorial "Criando uma API robusta em dotnet core 6" do canal Manual do Programador. Link: https://www.youtube.com/watch?v=ufjRbiaoou4&list=PLP4r6dpm_h-vPhZ-OXz3B5dcKpohAjhUE.
-
-Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar (CRUD) pessoas, produtos e compras, cada uma vinculada a um produto e uma pessoa.
+Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar pessoas, produtos e compras, cada uma vinculada a um produto e uma pessoa. Baseado no tutorial [Criando uma API robusta em dotnet core 6](https://www.youtube.com/watch?v=ufjRbiaoou4&list=PLP4r6dpm_h-vPhZ-OXz3B5dcKpohAjhUE) do canal Manual do Programador.
 
 ## Seções:
 
@@ -111,7 +109,9 @@ Ou seja, uma pessoa ou um produto podem estar vinculada a n compras, mas uma com
 
 ## Criação do banco de dados em SQL Server
 
-Para a criação do banco SQL Server, (...)
+Para a criação do banco SQL Server, utilizou-se o software SQL Server Management Studio. Primeiramente, criou-se a nossa database: Janela Object Explore ➡ Clique em ➕ para expandir a conexão ➡ Botão direito na pasta databases e selecione new database ➡ Escolher o nome que quiser e pressione OK ➡ Pressione o botão direito novamente e selecione Refresh.
+
+Agora para criar nossas tabelas pressione o botão direito na database criada e selecione New query. Uma nova janela se abrirá, onde colocaremos nosso código SQL. Para consultar o código utilizado nesse exemplo, verifique o arquivo DDL.sql.
 
 ## DbContext e mapeamento de entidades
 
