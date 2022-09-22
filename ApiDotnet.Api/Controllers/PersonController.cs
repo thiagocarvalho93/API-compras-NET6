@@ -1,10 +1,12 @@
 using ApiDotnet.Application.DTOs;
 using ApiDotnet.Application.Services.Interfaces;
 using ApiDotnet.Domain.FiltersDb;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiDotnet.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class PersonController : ControllerBase
     {
