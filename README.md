@@ -4,23 +4,23 @@ Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar pe
 
 ## Seções:
 
-- Softwares utilizados
-- Estrutura do projeto
-- Criação das entidades
-- Criação do banco de dados SQL Server
-- DbContext e mapeamento de entidades
-- Repositories
-- DTOs
-- Services
-- Injeção de dependências
-- Controllers
-- Paginação
-- Transação
-- Autenticação JWT
+1. Softwares utilizados
+2. Estrutura do projeto
+3. Criação das entidades
+4. Criação do banco de dados SQL Server
+5. DbContext e mapeamento de entidades
+6. Repositories
+7. DTOs
+8. Services
+9. Injeção de dependências
+10. Controllers
+11. Paginação
+12. Transação
+13. Autenticação JWT
 
 ---
 
-## Softwares utilizados
+## 1. Softwares utilizados
 
 [SDK do dotnet 6](https://dotnet.microsoft.com/en-us/download)
 
@@ -39,7 +39,7 @@ Extensões do vscode:
 
 Obs: Pode-se utilizar outro editor de texto (ex. Visual Studio) no lugar do VSCode e outro banco de dados (ex. Postgresql) e respectivo SGBD (ex. pgAdmin 4) no lugar do SQL Server. Fica a critério do usuário.
 
-## Estrutura do projeto
+## 2. Estrutura do projeto
 
 Uma boa arquitetura é vital para construir aplicações escaláveis, modulares e de fácil manutenção. Esse projeto utiliza a arquitetura "Clean code" (ou arquitetura limpa), que tem como principais benefícios ser:
 
@@ -85,7 +85,7 @@ Obs: A camada API.Infra.IoC é uma camada auxiliar responsável pela injeção d
 
 [Fonte](https://www.c-sharpcorner.com/article/introduction-to-clean-architecture-and-implementation-with-asp-net-core/)
 
-## Criação das entidades
+## 3. Criação das entidades
 
 Os modelos são as classes responsáveis por representar as tabelas do banco de dados, onde cada um dos atributos da classe representa uma coluna de sua tabela correspondente. Elas são as classes principais do nosso projeto, portanto ficam na camada Domain.
 
@@ -126,7 +126,7 @@ Para a validação do modelo, primeiro criou-se a exception personalizada [Domai
 
 Voltando ao modelo de [Person](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Person.cs), foi criado um método com as validações dos campos que são entrados como atributos. Esse método de validação é chamado nos construtores, para não permitir que se criem instâncias inválidas do mesmo. A mesma lógica é aplicada aos modelos de [Product](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Product.cs) e [Purchase](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Domain/Entities/Purchase.cs).
 
-## Criação do banco de dados SQL Server
+## 4. Criação do banco de dados SQL Server
 
 Para a criação do banco SQL Server, utilizou-se o software SQL Server Management Studio. Para a criação da database:
 
@@ -139,7 +139,7 @@ Agora para criar nossas tabelas pressione o botão direito na database criada e 
 
 Obs: no tutorial original utilizou-se o Postgresql e o pgAdmin 4, o tipo de banco de dados fica ao critério do usuário. No entanto, deve-se atentar à instalação do respectivo driver de conexão e configurações específicas do banco descritas nos próximos passos.
 
-## DbContext e mapeamento de entidades
+## 5. DbContext e mapeamento de entidades
 
 O DbContext é a classe responsável por fazer a comunicação direta com o banco de dados. Para criar a conexão com o banco, será necessário a instalação de alguns packages. Em Infra.Data, adicionaremos os pacotes que comunicam com o SqlServer:
 
@@ -203,34 +203,34 @@ Todos os métodos de configuração podem ser vistos [aqui](https://learn.micros
 - HasColumnName(string nome): nome da coluna da propriedade referenciada.
 - UseIdentityColumn(): Para se referenciar à coluna da chave primária.
 
-## Repositories
+## 6. Repositories
 
 A camada de repositório contem os métodos de consulta e alteração do banco de dados. (...)
 
-## DTOs
+## 7. DTOs
 
 Data Transfer Objects (DTO) são objetos que representam (...)
 
-## Services
+## 8. Services
 
 A camada services contém as regras de negócio (...)
 
-## Injeção de dependências
+## 9. Injeção de dependências
 
 O pattern de injeção de dependência (dependency injection) é utilizado para (...)
 
-## Controllers
+## 10. Controllers
 
 A camada de controllers é a camada que permite ao usuário se comunicar com a API através do protocolo HTTP (...)
 
-## Paginação
+## 11. Paginação
 
 Para se fazer uma busca dos registros do banco e não sobrecarregar o usuário com excesso de dados, recomenda-se a utilização da busca paginada (...)
 
-## Transação
+## 12. Transação
 
 Existem casos nos quais uma requisição modifica o banco de dados mais de uma vez. Nesse caso, a aplicação pode modificar algumas tabelas no banco e ocorrer um erro no meio do caminho, ocasionando dados errados. Para isso, (...)
 
-## Autenticação JWT
+## 13. Autenticação JWT
 
 Para restringir o acesso de métodos a certos usuários cadastradaos (...)
