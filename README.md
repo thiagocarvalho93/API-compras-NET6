@@ -128,7 +128,12 @@ Voltando ao modelo de [Person](https://github.com/thiagocarvalho93/API-compras-N
 
 ## Criação do banco de dados SQL Server
 
-Para a criação do banco SQL Server, utilizou-se o software SQL Server Management Studio. Para a criação da database: Janela Object Explore ➡ Clique em ➕ para expandir a conexão ➡ Botão direito na pasta databases e selecione new database ➡ Escolher o nome que quiser e pressione OK ➡ Pressione o botão direito novamente e selecione Refresh.
+Para a criação do banco SQL Server, utilizou-se o software SQL Server Management Studio. Para a criação da database:
+
+1. Na janela Object Explorer clique em ➕ para expandir a conexão
+2. Botão direito na pasta databases e selecione new database
+3. Escolher o nome que quiser e pressione OK
+4. Pressione o botão direito novamente e selecione Refresh.
 
 Agora para criar nossas tabelas pressione o botão direito na database criada e selecione New query. Uma nova janela se abrirá, onde colocaremos nosso código SQL. Para consultar o código utilizado nesse exemplo, verifique o arquivo [DDL.sql](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/DDL.sql).
 
@@ -136,7 +141,67 @@ Obs: no tutorial original utilizou-se o Postgresql e o pgAdmin 4, o tipo de banc
 
 ## DbContext e mapeamento de entidades
 
-O DbContext é a classe responsável por fazer a comunicação direta com o banco de dados. (...)
+O DbContext é a classe responsável por fazer a comunicação direta com o banco de dados. Para criar a conexão com o banco, será necessário a instalação de alguns packages. Em Infra.Data, adicionaremos os pacotes que comunicam com o SqlServer:
+
+> caso queira usar outro banco de dados, procurar os pacotes correspondentes.
+
+`dotnet add package Microsoft.EntityFrameworkCore.SqlServer`<br>
+`dotnet add package Microsoft.EntityFrameworkCore.Design`<br>
+`dotnet add package Microsoft.EntityFrameworkCore`
+
+Em seguida, criamos a pasta Context em Infrastructure.Data e a classe [ApplicationDbContext](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Infra.Data/Context/ApplicationDbContext.cs) herdando DbContext do EntityFramework.
+
+```
+└── Infrastructure.Data
+    └── Context
+        └── ApplicationDbContext.cs
+```
+
+Nessa classe, iremos declarar como atributos do tipo DbSet os nossos Models criados de Person, Product e Purchase, indicando que essas classes representam tabelas no banco de dados. Em seguida, fazemos um override do método OnModelCreating, para que as futuras configurações de mapeamento sejam aplicadas efetivamente.
+
+No entanto, ainda há um problema: as tabelas não possuem os mesmos nomes nas entidades criadas e no banco de dados, bem como seus atributos e colunas. Como fazer para que o programa entenda qual atributo corresponde a qual coluna? Para isso, iremos criar o mapeamento entre elas. Essas configurações poderiam ser criadas no método OnModelCreating, mas para melhor organização, podemos criar a pasta Maps e [adicionar classes de mapeamento separadas para cada entidade](https://learn.microsoft.com/en-us/ef/core/modeling/), desde que implementem a interface IEntityTypeConfiguration&lt;TEntity>.
+
+```
+└── Infrastructure.Data
+    └── Maps
+        ├── PersonMap.cs
+        ├── ProductMap.cs
+        └── PurchaseMap.cs
+```
+
+Obs: repare que essas configurações de mapeamento serão aplicadas no override do método OnModelCreating na linha:<br>
+
+```
+modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+```
+
+Tomaremos como exemplo a classe [PersonMap](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Infra.Data/Maps/PersonMap.cs). As configurações são feitas no método Configure, que leva como parâmetro o EntityTypeBuilder do modelo. As configurações são feitas então adicionando os métodos ao builder.
+
+```
+public class PersonMap : IEntityTypeConfiguration<Person>
+    {
+        public void Configure(EntityTypeBuilder<Person> builder)
+        {
+            builder.ToTable("Pessoa");
+
+            builder.HasKey(c => c.Id);
+
+            builder.Property(c => c.Id)
+                .HasColumnName("IdPessoa")
+                .UseIdentityColumn();
+
+            builder.Property(c => c.Name)
+                .HasColumnName("NmPessoa");
+            ...
+```
+
+Todos os métodos de configuração podem ser vistos [aqui](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder-1?view=efcore-6.0), mas os principais são:
+
+- ToTable(string x): x é o nome da tabela no banco.
+- HasKey(x => x.y): y é a propriedade que é chave primária no banco.
+- Property(x => x.y): y é a propriedade referenciada.
+- HasColumnName(string nome): nome da coluna da propriedade referenciada.
+- UseIdentityColumn(): Para se referenciar à coluna da chave primária.
 
 ## Repositories
 
