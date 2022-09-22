@@ -22,9 +22,9 @@ Baseado no tutorial "Criando uma API robusta em dotnet core 6" do canal Manual d
 
 ## Softwares utilizados
 
-SDK do dotnet 6. Link para instação: https://dotnet.microsoft.com/en-us/download
+SDK do dotnet 6. [Link](https://dotnet.microsoft.com/en-us/download)
 
-VS code. Link: https://code.visualstudio.com/download
+VS code. [Link](https://code.visualstudio.com/download)
 
 Extensões do vscode:
 
@@ -33,9 +33,9 @@ Extensões do vscode:
 - C# snippets: snippets úteis para C#.
 - vsode-solution-explorer: facilita o trabalho com as solutions (adicionar referências, etc.).
 
-SQL Server 2017. Link: https://www.microsoft.com/pt-br/sql-server/sql-server-downloads
+SQL Server 2017. [Link](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
 
-SQL Server Management Studio 18. Link: https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16
+SQL Server Management Studio 18. [Link](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16)
 
 ## Estrutura do projeto
 
@@ -50,13 +50,13 @@ O principal conceito por trás desse padrão é que a lógica/código da aplica�
 - Domain
 - Application (juntamente com o Domain formam o Core da aplicação)
 - Infrastructure
-- Dependências externas
+- Sistemas externos (Front end, database, etc.)
 
 Na Arquitetura Limpa todas as dependências fluem de fora para dentro. O Core não depende de nenhuma outra camada e as camada de Infrastructure e dependências externas dependem do Core.
 
-![image](clean-code.png)
+![image](https://csharpcorner-mindcrackerinc.netdna-ssl.com/article/introduction-to-clean-architecture-and-implementation-with-asp-net-core/Images/pic2-1.png)
 
-Para começar o projeto, criou-se uma pasta com o nome ApiDotNet6 (ou outro nome a seu critério). Dentro da pasta, no VSCode, foi utlizado o console para criação dos projetos. Inicialmente, criou-se a solution pelo comando `dotnet new sln`. Esse comando gerará uma nova solution com o nome da pasta na qual você está.
+Para começar o projeto, criou-se uma pasta com o nome ApiDotNet6 (ou outro nome a seu critério). Dentro da pasta, no VSCode, foi utlizado o console para criação dos projetos. Inicialmente, criou-se a solution pelo comando `dotnet new sln`. Esse comando gera uma nova solution com o nome da pasta na qual você está.
 
 Em seguida, criou-se a WebApi pelo comando `dotnet new webapi -n API -o API`. Agora pra criar as class libs:<br>
 `dotnet new classlib -n Domain -o API.Domain`<br>
@@ -71,21 +71,33 @@ Para vincular os projetos à solution:<br>
 `dotnet sln add ./API.Infra.IoC/`<br>
 `dotnet sln add ./API.Application/`<br>
 
-Agora, para adicionar as referências, pode-se fazer de duas formas: através dos comandos `dotnet add [<PROJECT>] reference <PROJECT_REFERENCES>` ou pela extensão vsode-solution-explorer. As seguintes referências serão feitas:
+Agora, para adicionar as referências, pode-se fazer de duas formas: através dos comandos `dotnet add [<PROJECT>] reference <PROJECT_REFERENCES>` ou pela extensão vsode-solution-explorer. As seguintes referências foram feitas:
 
-- Domain não referencia ninguém, mas será referenciado por todos os outros projetos.
+- Domain não referencia ninguém, mas é referenciado por todos os outros projetos.
 - Infra.IoC também referencia API.Application e API.Infra.Data.
 - API também referencia API.Infra.IoC.
 
-Obs: A camada API.Infra.IoC é uma camada auxiliar responsável pela injeção de dependência, criada para que a camada API não dependa da camada API.Infra.Data.
 Rodar a build para verificar se há erros com `dotnet build`.
 
-Fonte: https://www.c-sharpcorner.com/article/introduction-to-clean-architecture-and-implementation-with-asp-net-core/
+Obs: A camada API.Infra.IoC é uma camada auxiliar responsável pela injeção de dependência, criada para que a camada API não dependa da camada API.Infra.Data.
+
+[Fonte](https://www.c-sharpcorner.com/article/introduction-to-clean-architecture-and-implementation-with-asp-net-core/)
 
 ## Criação das entidades
 
-Os modelos são as classes responsáveis por representar as tabelas do banco de dados. Para isso, (...)
+Os modelos são as classes responsáveis por representar as tabelas do banco de dados. Elas são as classes principais do nosso projeto, portanto ficam na camada Domain.
 
+No nosso caso, eles foram criados na pasta Entities (também pode ser chamada de Models). Além disso, foi criada uma classe de Exception específica (DomainValidationException.cs) para representar um erro na instanciação de uma Entity.
+
+```
+└── Domain
+    └── Entities
+        ├── Person.cs
+        └── etc...
+    └── Validations
+        └── DomainValidationException.cs
+```
+(...)
 ## Criação do banco de dados em SQL Server
 
 Para a criação do banco SQL Server, (...)
