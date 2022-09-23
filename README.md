@@ -197,11 +197,46 @@ public class PersonMap : IEntityTypeConfiguration<Person>
 
 Todos os métodos de configuração podem ser vistos [aqui](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder-1?view=efcore-6.0), mas os principais são:
 
-- ToTable(string x): x é o nome da tabela no banco.
-- HasKey(x => x.y): y é a propriedade que é chave primária no banco.
-- Property(x => x.y): y é a propriedade referenciada.
-- HasColumnName(string nome): nome da coluna da propriedade referenciada.
+- ToTable("Pessoa"): especifica o nome da tabela no banco.
+- HasKey(c => c.Id): especifica a propriedade que é chave primária no banco.
+- Property(c => c.Name): Para se referenciar à propriedade.
+- HasColumnName("IdPessoa"): especifica o nome da coluna no banco da propriedade referenciada.
 - UseIdentityColumn(): Para se referenciar à coluna da chave primária.
+
+**Para mapear o relacionamento entre tabelas**
+
+- HasOne ou HasMany identifica a propriedade de navegação no tipo de entidade em que você está iniciando a configuração.
+- Em seguida, encadeia uma chamada para WithOne ou WithMany para identificar a navegação inversa.
+- HasOne/WithOne são usados para propriedades de navegação de referência e HasMany/WithMany são usados para propriedades de navegação de coleção.
+- HasForeignKey especifica a propriedade que será usada como chave estrangeira na tabela referenciada.
+
+No nosso caso, teremos em [PersonMap](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Infra.Data/Maps/PersonMap.cs):
+
+```
+public void Configure(EntityTypeBuilder<Person> builder)
+        {
+            ...
+            builder.HasMany(c => c.Purchases)
+                .WithOne(p => p.Person)
+                .HasForeignKey(c => c.PersonId);
+        }
+```
+
+Em [PurchaseMap](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Infra.Data/Maps/PurchaseMap.cs) teremos a relação inversa:
+
+```
+public void Configure(EntityTypeBuilder<Purchase> builder)
+        {
+            ...
+            builder.HasOne(x => x.Person)
+                .WithMany(p => p.Purchases);
+
+            builder.HasOne(x => x.Product)
+                .WithMany(p => p.Purchases);
+        }
+```
+
+[Ver mais sobre mapeamento de relacionamentos](https://learn.microsoft.com/pt-br/ef/core/modeling/relationships?source=recommendations&tabs=fluent-api%2Cfluent-api-simple-key%2Csimple-key)
 
 ## 6. Repositories
 
