@@ -10,9 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -48,12 +48,15 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddInfrastructure(builder.Configuration);
+// Injeção de dependências
 builder.Services.AddServices(builder.Configuration);
+
+// Configuração pra não mostrar campos nulos no JSON
 builder.Services.AddMvc().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
 );
 
+// Configurações do JWT
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("projetoDoNetCore6"));
 builder.Services.AddAuthentication(authOptions =>
 {

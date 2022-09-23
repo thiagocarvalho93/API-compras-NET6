@@ -81,7 +81,7 @@ Agora, para adicionar as referências, pode-se fazer de duas formas: através do
 
 Rodar a build para verificar se há erros com `dotnet build`.
 
-Obs: A camada API.Infra.IoC é uma camada auxiliar responsável pela injeção de dependência, criada para que a camada API não dependa da camada API.Infra.Data.
+Obs: A camada API.Infra.IoC (Inversion of Control) é uma camada auxiliar responsável pela injeção de dependência, criada para que a camada API não dependa da camada API.Infra.Data. [Ver sobre Dependency injection](https://learn.microsoft.com/en-us/dotnet/architecture/maui/dependency-injection).
 
 [Fonte](https://www.c-sharpcorner.com/article/introduction-to-clean-architecture-and-implementation-with-asp-net-core/)
 
@@ -303,7 +303,52 @@ Primeiro, criamos a pasta Services na camada Application. Dentro dela, criamos a
 
 ## 9. Injeção de dependências
 
-O pattern de injeção de dependência (dependency injection) é utilizado para (...)
+Ao especificar dependências como tipos de interface, a injeção de dependência permite desacoplar os tipos concretos do código que depende desses tipos. Ele geralmente usa um contêiner que contém uma lista de registros e mapeamentos entre interfaces e tipos abstratos e os tipos concretos que implementam ou estendem esses tipos.
+
+Criaremos esse contêiner criando a classe [DependencyInjection.cs](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Infra.IoC/DependencyInjection.cs) na camada Infra.IoC. Essa classe **precisa ser estática**, pois iremos utilizar extension method.
+
+```
+└── Infra.IoC
+    └── DependencyInjection.cs
+```
+
+Nesse exemplo, foi criado um [extension Method](https://weblogs.asp.net/scottgu/new-orcas-language-feature-extension-methods) (para adicionar um novo método à interface IServiceCollection) AddServices. Esse método será chamado posteriormente em [Program.cs](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Api/Program.cs). O parâmetro IConfiguration é passado pra configurar a conexão do banco de dados. O método terá a assinatura `public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)`.
+
+Para injetar o DbContext, deve-se explicitar suas configurações. Essas configurações serão feitas posteriormente.
+
+```
+            // DbContext
+            services.AddDbContextPool<DbContext, ApplicationDbContext>(options =>
+                        {
+                            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                        });
+```
+
+Em seguida, adicionamos os mapeamentos entre as interfaces e tipos concretos dos repositories com o método AddScoped e por fim retornamos o próprio services.
+
+```
+            // Repositories
+            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+            // Services
+            services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+
+            return services;
+
+```
+
+Ao final, não esquecer de adicionar a chamada do método em [Program.cs](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Api/Program.cs).
+
+```
+var builder = WebApplication.CreateBuilder(args);
+
+...
+
+builder.Services.AddServices(builder.Configuration);
+```
 
 ## 10. Controllers
 

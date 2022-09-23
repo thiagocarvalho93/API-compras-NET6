@@ -14,29 +14,28 @@ namespace ApiDotnet.Infra.IoC
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContextPool<DbContext, ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+            // Repositories
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<IUnityOfWork, UnityOfWork>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddScoped<IUserRepository, UserRepository>();
-            return services;
-        }
-
-        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddAutoMapper(typeof(DomainToDTOMapping));
+            // Services
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddAutoMapper(typeof(DomainToDTOMapping));
             return services;
         }
+
     }
 }
