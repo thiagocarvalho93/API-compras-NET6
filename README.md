@@ -15,7 +15,7 @@ Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar pe
 9. [Injeção de dependências](#9-injeção-de-dependências)
 10. [Controllers](#10-controllers)
 11. [Paginação](#11-paginação)
-12. [Transação](#12-transação)
+12. [Unit of work](#12-unit-of-work)
 13. [Autenticação JWT](#13-autenticação-jwt)
 
 ---
@@ -240,11 +240,41 @@ public void Configure(EntityTypeBuilder<Purchase> builder)
 
 ## 6. Repositories
 
-A camada de repositório contem os métodos de consulta e alteração do banco de dados. (...)
+Repositories são classes que encapsulam a lógica de acesso ao banco de dados.
+
+Primeiro, criamos a pasta Repositories na camada Domain. Em seguida as interfaces IPersonRepository, IProductRepository e IPurchaseRepository (é uma boa prática em C# nomear interfaces com I no começo do nome).
+
+```
+└── Domain
+    └── Repositories
+        ├── IPersonRepository.cs
+        ├── IProductRepository.cs
+        └── IPurchaseRepository.cs
+```
+
+(...)
 
 ## 7. DTOs
 
-Data Transfer Objects (DTO) são objetos que representam (...)
+Data Transfer Object (DTO) ou simplesmente Transfer Object é um padrão de projetos para o transporte de dados entre diferentes componentes de um sistema, diferentes instâncias ou processos de um sistema distribuído ou diferentes sistemas via serialização. A ideia consiste basicamente em agrupar um conjunto de atributos numa classe simples de forma a otimizar a comunicação. Numa chamada remota, seria ineficiente passar cada atributo individualmente. Da mesma forma seria ineficiente ou até causaria erros passar uma entidade mais complexa.
+
+No nosso exemplo, na camada Application, criamos a pasta DTOs e as classes de DTOs relativos às entidades. Em seguida, na pasta DTOs criamos a pasta validations e as classes de validação correspondentes.
+
+```
+└── Application
+    └── DTOs
+        ├── PersonDTO.cs
+        ├── ProductDTO.cs
+        ├── PurchaseDTO.cs
+        └── Validations
+            ├── PersonDTOValidation.cs
+            ├── ProductDTOValidation.cs
+            └── PurchaseDTOValidation.cs
+
+
+```
+
+(...)
 
 ## 8. Services
 
@@ -262,7 +292,7 @@ A camada de controllers é a camada que permite ao usuário se comunicar com a A
 
 Para se fazer uma busca dos registros do banco e não sobrecarregar o usuário com excesso de dados, recomenda-se a utilização da busca paginada (...)
 
-## 12. Transação
+## 12. Unit of work
 
 Existem casos nos quais uma requisição modifica o banco de dados mais de uma vez. Nesse caso, a aplicação pode modificar algumas tabelas no banco e ocorrer um erro no meio do caminho, ocasionando dados errados. Para isso, (...)
 
