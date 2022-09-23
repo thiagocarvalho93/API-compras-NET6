@@ -274,11 +274,32 @@ No nosso exemplo, na camada Application, criamos a pasta DTOs e as classes de DT
 
 ```
 
+TODO melhorar futuramente com DTOs personalizados para request e response.
+
 (...)
 
 ## 8. Services
 
-A camada services contém as regras de negócio (...)
+As classes service encapsulam a regra de negócios da aplicação, controlando as transações e coordenando as respostas na implementação de suas operações.
+
+Primeiro, criamos a pasta Services na camada Application. Dentro dela, criamos as classes de Service de cada uma das entidades, e também outra pasta Interfaces, que conterá as interfaces dos services de cada uma delas. Criamos também uma classe ResultService, que fará a representação das respostas das implementações das operações.
+
+```
+└── Application
+    └── Services
+        ├── PersonService.cs
+        ├── ProductService.cs
+        ├── PurchaseService.cs
+        ├── ResultService.cs
+        └── Interfaces
+            ├── IPersonService.cs
+            ├── IProductService.cs
+            └── IPurchaseService.cs
+
+
+```
+
+(...)
 
 ## 9. Injeção de dependências
 
