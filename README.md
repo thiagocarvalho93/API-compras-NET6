@@ -276,6 +276,8 @@ No nosso exemplo, na camada Application, criamos a pasta DTOs e as classes de DT
 
 TODO melhorar futuramente com DTOs personalizados para request e response.
 
+TODO falar do automapper
+
 (...)
 
 ## 8. Services
@@ -314,7 +316,7 @@ Criaremos esse contêiner criando a classe [DependencyInjection.cs](https://gith
 
 Nesse exemplo, foi criado um [extension Method](https://weblogs.asp.net/scottgu/new-orcas-language-feature-extension-methods) (para adicionar um novo método à interface IServiceCollection) AddServices. Esse método será chamado posteriormente em [Program.cs](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Api/Program.cs). O parâmetro IConfiguration é passado pra configurar a conexão do banco de dados. O método terá a assinatura `public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)`.
 
-Para injetar o DbContext, deve-se explicitar suas configurações. Essas configurações serão feitas posteriormente.
+Para injetar o DbContext, deve-se explicitar suas configurações, que serão feitas posteriormente.
 
 ```
             // DbContext
@@ -324,7 +326,7 @@ Para injetar o DbContext, deve-se explicitar suas configurações. Essas configu
                         });
 ```
 
-Em seguida, adicionamos os mapeamentos entre as interfaces e tipos concretos dos repositories com o método AddScoped e por fim retornamos o próprio services.
+Em seguida, adicionamos os mapeamentos entre as interfaces e tipos concretos dos repositories com o método AddScoped.
 
 ```
             // Repositories
@@ -336,8 +338,13 @@ Em seguida, adicionamos os mapeamentos entre as interfaces e tipos concretos dos
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
 
-            return services;
+```
 
+Para fazer a injeção do AutoMapper usamos o método AddAutoMapper. No fim do método retornamos services.
+
+```
+            services.AddAutoMapper(typeof(DomainToDTOMapping));
+            return services;
 ```
 
 Ao final, não esquecer de adicionar a chamada do método em [Program.cs](https://github.com/thiagocarvalho93/API-compras-NET6/blob/main/ApiDotnet.Api/Program.cs).
