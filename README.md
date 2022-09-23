@@ -4,19 +4,19 @@ Este é o exemplo de uma API capaz de cadastrar, deletar, alterar e consultar pe
 
 ## Seções:
 
-1. Softwares utilizados
-2. Estrutura do projeto
-3. Criação das entidades
-4. Criação do banco de dados SQL Server
-5. DbContext e mapeamento de entidades
-6. Repositories
-7. DTOs
-8. Services
-9. Injeção de dependências
-10. Controllers
-11. Paginação
-12. Transação
-13. Autenticação JWT
+1. [Softwares utilizados](#1-softwares-utilizados)
+2. [Estrutura do projeto](#2-estrutura-do-projeto)
+3. [Criação das entidades](#3-criação-das-entidades)
+4. [Criação do banco de dados SQL Server](#3-criação-das-entidades)
+5. [DbContext e mapeamento de entidades](#5-dbcontext-e-mapeamento-de-entidades)
+6. [Repositories](#6-repositories)
+7. [DTOs](#7-dtos)
+8. [Services](#8-services)
+9. [Injeção de dependências](#9-injeção-de-dependências)
+10. [Controllers](#10-controllers)
+11. [Paginação](#11-paginação)
+12. [Transação](#12-transação)
+13. [Autenticação JWT](#13-autenticação-jwt)
 
 ---
 
