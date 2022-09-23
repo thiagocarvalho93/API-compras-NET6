@@ -274,9 +274,34 @@ No nosso exemplo, na camada Application, criamos a pasta DTOs e as classes de DT
 
 ```
 
-TODO melhorar futuramente com DTOs personalizados para request e response.
+Fazemos agora a seguinte pergunta: o que queremos passar de dados para cada requisição e o que queremos receber? Por exemplo, poderíamos adicionar uma compra passando apenas o documento da pessoa e o código Erp do produto, ao invés de seus ids. PurchaseDTO ficaria da seguinte maneira então:
 
-TODO falar do automapper
+```
+            public class PurchaseDTO
+            {
+                public string CodErp { get; set; }
+                public string Document { get; set; }
+            }
+
+```
+
+(TODO melhorar futuramente com DTOs personalizados para request e response.)
+
+Para fazer as validações dos DTOs, adicionamos o package FluentValidation ([documentação](https://docs.fluentvalidation.net/en/latest/)) com `dotnet add package FluentValidation`. Tomando a classe PersonDTOValidation como exemplo, fazemos ela herdar de AbstractValidator&lt;PersonDTO>. No construtor, adicionamos as regras de validação com o método RuleFor:
+
+```
+            RuleFor(x => x.Document)
+                .NotEmpty()
+                .NotNull()
+                .WithMessage("Documento deve ser informado!");
+
+```
+
+- RuleFor: Seleciona a propriedade a ser validada.
+- NotEmpty e NotNull: regras de validação (não pode ser vazia nem nula).
+- WithMessage: mensagem mostrada caso não passe na validação.
+
+Para fazer as conversões entre os tipos de DTO e entidades, adicionamos o pacote AutoMapper ([documentação](https://docs.automapper.org/en/stable/Getting-started.html)) com `dotnet add package AutoMapper`.
 
 (...)
 
